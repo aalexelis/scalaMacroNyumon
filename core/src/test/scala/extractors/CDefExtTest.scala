@@ -15,4 +15,10 @@ class CDefExtTest extends FunSuite {
     assert(FlgExtractor(in) == Option(Flg.True))
   }
 
+  test("FlgExtractor should reject garbage"){
+    val in = Option("garbage")
+
+    assert(FlgExtractor(in).isEmpty)
+  }
+
 }

@@ -9,7 +9,12 @@ import scala.collection.JavaConversions._
   * Created by andreas on 2017/02/15.
   */
 
-class CDefExtractor[O <: CDef](cdefObj: O) extends Function1[Option[String], Option[O]] {
+trait CDefExt[T <: CDef]{
+  def codeOf(code: String): T
+  def listAll(): List[T]
+}
+
+class CDefExtractor[O <: CDef](cdefObj: CDefExt[O]) extends Function1[Option[String], Option[O]] {
   override def apply(in: Option[String]): Option[O] = in
     .flatMap(inStr =>{
       val byCode = Option(cdefObj.codeOf(inStr))
@@ -19,9 +24,15 @@ class CDefExtractor[O <: CDef](cdefObj: O) extends Function1[Option[String], Opt
     })
 }
 
-object FlgExtractor extends CDefExtractor(Flg)
+object FlgExtractor extends CDefExtractor(new CDefExt[Flg] {
+  override def codeOf(code: String) = Flg.codeOf(code)
+  override def listAll() = Flg.listAll().toList
+})
 
-object GenderExtractor extends CDefExtractor(Gender)
+object GenderExtractor extends CDefExtractor(new CDefExt[Gender] {
+  override def codeOf(code: String) = Gender.codeOf(code)
+  override def listAll() = Gender.listAll().toList
+})
 
 //...
 
