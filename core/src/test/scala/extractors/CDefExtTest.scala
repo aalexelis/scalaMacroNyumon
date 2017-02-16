@@ -41,5 +41,13 @@ class CDefExtTest extends FunSuite {
     assert(FlgExtractor(y) == MacroFlgExtractor(y))
   }
 
+  test("MacroGenderExtractor should give the same results as GenderExtractor for the same input"){
+    val garbage = Option("garbage")
+    val male = Option("Male")
+
+    assert(GenderExtractor(garbage) == MacroGenderExtractor(garbage))
+    assert(GenderExtractor(male) == MacroGenderExtractor(male))
+  }
+
 
 }
