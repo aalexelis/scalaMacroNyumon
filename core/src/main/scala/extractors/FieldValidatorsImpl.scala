@@ -23,10 +23,6 @@ object GenderExtractor extends CDefExtractor[Gender] {
 
 //...
 
-object MacroFlgExtractor extends CDefExtractor[Flg] {
-  implicit val cdefObj: CDefExt[Flg] = CDefExt.materialize[Flg]
-}
+object MacroFlgExtractor extends CDefExtractor[Flg]
 
-object MacroGenderExtractor extends CDefExtractor[Gender] {
-  implicit val cdefObj: CDefExt[Gender] = CDefExt.materialize[Gender]
-}
+object MacroGenderExtractor extends CDefExtractor[Gender]
