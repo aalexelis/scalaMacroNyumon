@@ -20,11 +20,13 @@ object CDefExt {
   def materializeImpl[T <: CDef](c: whitebox.Context)(implicit tag:c.WeakTypeTag[T]): c.Tree = {
     import c.universe._
     val tpe = weakTypeOf[T]
-    q"""new CDefExt[$tpe] {
+    val result = q"""new CDefExt[$tpe] {
            override def codeOf(code: String) = $tpe.codeOf(code)
            override def listAll() = $tpe.listAll().toList
         }
      """
+    println(showCode(result))
+    result
   }
 }
 
