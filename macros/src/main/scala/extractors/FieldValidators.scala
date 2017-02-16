@@ -4,6 +4,8 @@ import models.CDef
 import models.CDef._
 import scala.collection.JavaConversions._
 
+import scala.language.experimental.macros
+import scala.reflect.macros.whitebox
 
 /**
   * Created by andreas on 2017/02/15.
@@ -12,6 +14,19 @@ import scala.collection.JavaConversions._
 trait CDefExt[T <: CDef]{
   def codeOf(code: String): T
   def listAll(): List[T]
+}
+
+object CDefExt {
+  def materialize[T <: CDef]: CDefExt[T] = macro materializeImpl[T]
+
+  def materializeImpl[T <: CDef](c: whitebox.Context)(implicit tag:c.WeakTypeTag[T]): c.Tree = {
+    import c.universe._
+    q"""new CDefExt[Flg] {
+           override def codeOf(code: String) = Flg.codeOf(code)
+           override def listAll() = Flg.listAll().toList
+        }
+     """
+  }
 }
 
 trait CDefExtractor[O <: CDef] extends Function1[Option[String], Option[O]] {
@@ -42,4 +57,9 @@ object GenderExtractor extends CDefExtractor[Gender] {
 }
 
 //...
+
+object MacroFlgExtractor extends CDefExtractor[Flg] {
+  implicit val cdefObj: CDefExt[Flg] = CDefExt.materialize[Flg]
+}
+
 
